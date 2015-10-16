@@ -39,6 +39,7 @@ module.exports = function (socketio) {
   // }));
 
   socketio.on('connection', function (socket) {
+    console.log("SOCKET")
     socket.address = socket.handshake.address !== null ?
             socket.handshake.address.address + ':' + socket.handshake.address.port :
             process.env.DOMAIN;
