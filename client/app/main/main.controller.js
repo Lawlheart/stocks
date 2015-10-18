@@ -86,17 +86,58 @@ angular.module('stocksApp')
     $("#viz").empty();
     $scope.viz = d3.select('#viz')
     $scope.stocksData = data.Elements;
+
+    //set up x variables
+    //set up xDomain by parsing time and passing it into d3.extent
+    var parseTime = d3.time.format('%Y-%m-%dT%H:%M:%S');
+    var xScale = d3.time.scale().range([600, 0]);
+    var xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(10);
+    $scope.viz.append('g')
+      .attr('class', 'x axis')
+      .call(xAxis)
+    var xDomain = d3.extent(data.Dates, function(d) {
+      return parseTime.parse(d)
+    });
+    xScale.domain(xDomain);
+
+
+    //set up y variables
+    //Set up yDomain by combining all datasets to one array, then using d3.extent
+    var yScale = d3.scale.linear().range([400,0]);
+    var yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(10);
+    $scope.viz.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis);
+    var allData = [];
+    for(var i=0;i<data.Elements.length;i++) {
+      allData = allData.concat(data.Elements[i].DataSeries.close.values)
+    }
+    var yDomain = d3.extent(allData, function(d) {
+      return parseInt(d)
+    });
+    yScale.domain(yDomain);
+
+
+
     for(var i=0;i< data.Elements.length; i++) {
-      var currentStock = data.Elements[i];
-      var dots = $scope.viz.selectAll('circle' + i)
-        .data(currentStock.DataSeries.close.values)
+
+      var dots = $scope.viz.append('g')
+        .attr('class', data.Elements[i].Symbol)
+        .attr('class', 'data-set')
+        .selectAll('circle')
+        .data(data.Elements[i].DataSeries.close.values)
         .enter()
         .append('circle')
       dots.attr('r', 2)
-        .attr('cx', function(d, index) {return data.Positions[index]*600;})
-        .attr('cy', function(d, index) {return 400-d;})
+        .attr('cx', function(d, index) {
+          var date = parseTime.parse(data.Dates[index])
+          return xScale(date)
+        })
+        .attr('cy', function(d, index) {
+          return yScale(d);
+        })
         .style('fill', $scope.colors[i])
-      // console.log(dots)
+      console.log(data)
     }
   };
   

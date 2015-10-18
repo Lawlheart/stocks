@@ -36,11 +36,20 @@
   margin-left: 15px;
 }
 #viz {
-  height:400px;
-  width:600px;
+  height:500px;
+  width:700px;
   border:4px solid #ddddee;
   border-radius: 10px;
   background-color: #dddddd;
+}
+#viz g.data-set  {
+  transform: translate(50px,50px);
+}
+#viz g.x.axis{
+  transform: translate(50px, 470px);
+}
+#viz g.y.axis{
+  transform: translate(30px, 50px);
 }
 .start-button {
   max-width:400px;
