@@ -36,20 +36,20 @@
   margin-left: 15px;
 }
 #viz {
-  height:500px;
-  width:700px;
+  height:550px;
+  width:1000px;
   border:4px solid #ddddee;
   border-radius: 10px;
   background-color: #dddddd;
 }
-#viz g.data-set  {
+#viz g.dots  {
   transform: translate(50px,50px);
 }
 #viz g.x.axis{
-  transform: translate(50px, 470px);
+  transform: translate(50px, 480px);
 }
 #viz g.y.axis{
-  transform: translate(30px, 50px);
+  transform: translate(50px, 50px);
 }
 .start-button {
   max-width:400px;
@@ -75,4 +75,11 @@
 }
 form {
   margin:20px auto;
+}
+.axis line,
+.axis path {
+  stroke-width: 1;
+  fill: none;
+  stroke: #333;
+  shape-rendering: crispEdges;
 }
