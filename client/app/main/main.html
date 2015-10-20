@@ -25,9 +25,9 @@
         </li>
       </ul>
       <pre>{{stocks}}</pre>
-      <form class="form-horizontal">
+      <form class="form-horizontal" name="addStock">
         <input type="text" ng-model="newStock" class="form-control new-stock-input">
-        <input class="btn btn-default" value="Add Stock" ng-click="addStock(newStock)"> 
+        <input class="btn btn-default" value="Add Stock" ng-click="addStock(newStock)" ng-disabled="!checkIfValid()"> 
       </form>
     </div>
   </div>
