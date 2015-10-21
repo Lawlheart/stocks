@@ -1,7 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <main class="hero-unit" id="banner">
-  <div class="container" id="start-screen">
+  <div class="container hero-unit" id="start-screen">
     <h1>Stocks</h1>
     <p class="lead">powered by</p>
     <img src="assets/images/yeoman.png" alt="I'm Yeoman" class="powered-by">
@@ -24,11 +24,19 @@
           </a>
         </li>
       </ul>
-      <pre>{{stocks}}</pre>
-      <form class="form-horizontal" name="addStock">
-        <input type="text" ng-model="newStock" class="form-control new-stock-input">
-        <input class="btn btn-default" value="Add Stock" ng-click="addStock(newStock)" ng-disabled="!checkIfValid()"> 
+      <form class="form-horizontal">
+        <div class="searchbox">
+        <input type="text" ng-model="newStock" class="form-control new-stock-input" ng-change="searchStocks(newStock)" ng-model-options="{debounce: 500}" placeholder="Add Stock">
+        <ul id="stocks-autocomplete" ng-show="stocksSearch !== undefined">
+          <li ng-repeat="stock in stocksSearch" class="form-control stock-select" data-symbol="{{stock.Symbol}}" ng-click="addStock(stock.Symbol)">{{stock.Symbol}} ({{stock.Name}}) </li>
+        </ul>
+        </div>
+        <!-- <input class="btn btn-default pull-left" value="Add Stock" ng-click="addStock(newStock)">  -->
       </form>
+      <div class="debug">
+        <pre>{{stocksSearch}} 
+             {{newStock}}</pre>
+      </div>
     </div>
   </div>
 </main>
