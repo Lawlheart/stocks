@@ -70,9 +70,11 @@ angular.module('stocksApp')
 
   //adds newStock input, calls updateStocks
   $scope.addStock = function(newStock) {
-    $scope.stocks.push(newStock);
-    $scope.stockSearch = "";
-    $scope.updateStocks();
+    $scope.searchStocks("");
+    if($scope.stocks.indexOf() < 0) {
+      $scope.stocks.push(newStock);
+      $scope.updateStocks();
+    }
   };
 
   //removes removedStock input, calls updateStocks

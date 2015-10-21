@@ -26,17 +26,17 @@
       </ul>
       <form class="form-horizontal">
         <div class="searchbox">
-        <input type="text" ng-model="newStock" class="form-control new-stock-input" ng-change="searchStocks(newStock)" ng-model-options="{debounce: 500}" placeholder="Add Stock">
-        <ul id="stocks-autocomplete" ng-show="stocksSearch !== undefined">
-          <li ng-repeat="stock in stocksSearch" class="form-control stock-select" data-symbol="{{stock.Symbol}}" ng-click="addStock(stock.Symbol)">{{stock.Symbol}} ({{stock.Name}}) </li>
-        </ul>
+          <input type="text" ng-model="newStock" class="form-control new-stock-input" ng-change="searchStocks(newStock)" ng-model-options="{debounce: 500}" placeholder="Add Stock">
+          <ul id="stocks-autocomplete" ng-show="stocksSearch !== undefined">
+            <li ng-repeat="stock in stocksSearch" class="form-control stock-select" data-symbol="{{stock.Symbol}}" ng-click="addStock(stock.Symbol)">{{stock.Symbol}} ({{stock.Name}}) </li>
+          </ul>
         </div>
         <!-- <input class="btn btn-default pull-left" value="Add Stock" ng-click="addStock(newStock)">  -->
       </form>
-      <div class="debug">
+<!--       <div class="debug">
         <pre>{{stocksSearch}} 
              {{newStock}}</pre>
-      </div>
+      </div> -->
     </div>
   </div>
 </main>
