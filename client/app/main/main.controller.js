@@ -2,11 +2,11 @@
 
 angular.module('stocksApp')
 
-.controller('MainCtrl', function ($scope, $http, socket) {
+.controller('MainCtrl', function ($scope, $http, socket, toaster) {
 
   //on page load, sets up variables, calls stocks api
   $('#stocks-screen').addClass('hidden');
-  $scope.colors = ["green", "blue", "purple", "teal", "orange", "red", "gold", "violetred", "firebrick", "skyblue"];
+  $scope.colors = ["green", "skyblue", "purple", "teal", "orange", "red", "gold", "violetred", "firebrick", "blue"];
   $http.get('/api/stocks/allstocks').success(function(data) {
     $scope.stocks = data.stocks;
     //syncs socket updates with getMarkitData as a callback
@@ -30,13 +30,13 @@ angular.module('stocksApp')
           console.log(data);
           $scope.stocksSearch = data;
         }).error(function(err) {
+          toaster.pop('error', "API Load Error", "you might need to reload the page");
           console.error(err)
         })
     } else {
       $scope.stocksSearch = [];
     }
   };
-
   //takes the stocks array and converts it into the api query parameters
   $scope.getParameters = function(stocks) {
     var parameters = { 
@@ -69,6 +69,7 @@ angular.module('stocksApp')
         $("#viz").empty();
       }
     }).error(function(err) {
+      toaster.pop('error', "API Load Error", "you might need to reload the page");
       console.error(err)
     })
   };
@@ -132,7 +133,6 @@ angular.module('stocksApp')
       time.setMonth(time.getMonth() + 1);
       return time
     });
-    console.log([xMin, xMax])
     xScale.domain([xMin, xMax]);
     $scope.viz.append('g')
       .attr('class', 'x axis')

@@ -6,7 +6,9 @@ angular.module('stocksApp', [
   'ngSanitize',
   'ngRoute',
   'btford.socket-io',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngAnimate',
+  'toaster'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
