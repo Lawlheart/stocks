@@ -6,7 +6,7 @@ angular.module('stocksApp')
 
   //on page load, sets up variables, calls stocks api
   $('#stocks-screen').addClass('hidden');
-  $scope.colors = ["green", "blue", "purple", "teal", "orange"];
+  $scope.colors = ["green", "blue", "purple", "teal", "orange", "red", "gold", "violetred", "firebrick", "skyblue"];
   $http.get('/api/stocks/allstocks').success(function(data) {
     $scope.stocks = data.stocks;
     //syncs socket updates with getMarkitData as a callback
@@ -14,7 +14,7 @@ angular.module('stocksApp')
       $scope.stocks = item
       $scope.getMarkitData();
     });
-  }).error(function(error) {
+    }).error(function(error) {
     // if allstocks doesn't exist, creates it with empty stocks array
     $http.post('/api/stocks/', {_id: "allstocks", stocks: []})
     .success(function(data) {
@@ -23,13 +23,18 @@ angular.module('stocksApp')
     })
   })
 
+  //searches the Markit stocks api to find valid stocks codes
   $scope.searchStocks = function(stockQuery) {
-    $http.jsonp('http://dev.markitondemand.com/Api/v2/Lookup/jsonp?input=' + encodeURI(JSON.stringify(stockQuery)) + '&callback=JSON_CALLBACK').success(function(data) {
-        console.log(data);
-        $scope.stocksSearch = data;
-      }).error(function(err) {
-        console.error(err)
-      })
+    if(stockQuery.length > 0 ) {
+      $http.jsonp('http://dev.markitondemand.com/Api/v2/Lookup/jsonp?input=' + encodeURI(JSON.stringify(stockQuery)) + '&callback=JSON_CALLBACK').success(function(data) {
+          console.log(data);
+          $scope.stocksSearch = data;
+        }).error(function(err) {
+          console.error(err)
+        })
+    } else {
+      $scope.stocksSearch = [];
+    }
   };
 
   //takes the stocks array and converts it into the api query parameters
@@ -93,6 +98,19 @@ angular.module('stocksApp')
     })
   };
 
+  $scope.padMoney = function(num) {
+    var str = num.toString()
+    var dIndex = str.indexOf(".");
+
+    if(dIndex < 0) {
+      return str + ".00"
+    } else if (str.length - dIndex === 2 ) {
+      return str + "0"
+    } else {
+      return str.slice(0,dIndex+3);
+    }
+  }
+
   //renders stocks using d3. data input is raw data from Markit API
   $scope.renderStocks = function(data) {
     $("#viz").empty();
@@ -148,12 +166,15 @@ angular.module('stocksApp')
 
     for(var i=0;i< data.Elements.length; i++) {
 
-      var dots = $scope.viz.selectAll('g.dots.data-set.' + data.Elements[i].Symbol)
+      var group = $scope.viz.append('g')
+        .attr('class', data.Elements[i].Symbol + ' data-set');
+
+      var dots = group.selectAll('circle')
         .data(data.Elements[i].DataSeries.close.values)
         .enter()
         .append('g')
-        .attr('class', 'dots data-set')
-        .attr('class', data.Elements[i].Symbol)
+        .attr('class', 'dots')
+        .attr('class', data.Elements[i].Symbol);
 
       dots.attr('transform', function(d, index) {
         var date = parseTime.parse(data.Dates[index]);
@@ -190,7 +211,7 @@ angular.module('stocksApp')
       
       //append stock value info to popup
       dots.append('text').text(function(d) {
-          return "$" + d
+          return "$" + $scope.padMoney(d)
         })
         .attr('transform', 'translate(30, 5)')
         .style('font-size', '20px')
@@ -210,6 +231,7 @@ angular.module('stocksApp')
       //event handlers for popup box
       dots.on('mouseenter', function(d, i) {
         var dot = d3.select(this);
+        this.parentNode.parentNode.appendChild(this.parentNode);
         dot.selectAll('text')
            .style('display', 'block');
 
@@ -224,12 +246,7 @@ angular.module('stocksApp')
         d3.select(this)
            .selectAll('rect')
            .style('display', 'none');
-
       });
-
-
-
-      console.log(data)
     }
   };
 });

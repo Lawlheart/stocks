@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<main class="hero-unit" id="banner">
+<main>
   <div class="container hero-unit" id="start-screen">
     <h1>Stocks</h1>
     <p class="lead">powered by</p>
@@ -15,29 +15,31 @@
     <div id="viz-wrapper">
       <svg id="viz"></svg>
     </div>
-    <div id="selected-stocks">
-      <h4 ng-show="loaded">Selected Stocks</h4>
-      <ul class="nav nav-pills" >
-        <li ng-repeat="stock in stocksData">
-          <a href="#" tooltip="{{stock.Symbol + ' Stock'}}" ng-style="{'color': colors[$index]}">{{stock.Symbol}} 
-            <button type="button" class="close" ng-click="removeStock(stock.Symbol)"> &times; </button>
-          </a>
-        </li>
-      </ul>
-      <form class="form-horizontal">
-        <div class="searchbox">
-          <input type="text" ng-model="newStock" class="form-control new-stock-input" ng-change="searchStocks(newStock)" ng-model-options="{debounce: 500}" placeholder="Add Stock">
-          <ul id="stocks-autocomplete" ng-show="stocksSearch !== undefined">
-            <li ng-repeat="stock in stocksSearch" class="form-control stock-select" data-symbol="{{stock.Symbol}}" ng-click="addStock(stock.Symbol)">{{stock.Symbol}} ({{stock.Name}}) </li>
-          </ul>
-        </div>
-        <!-- <input class="btn btn-default pull-left" value="Add Stock" ng-click="addStock(newStock)">  -->
-      </form>
-<!--       <div class="debug">
-        <pre>{{stocksSearch}} 
-             {{newStock}}</pre>
-      </div> -->
+    <div id="selected-stocks" class="main-container">
+      <div class="fixer-container">
+        <ul class="nav nav-pills text-center" >
+          <li ng-repeat="stock in stocksData">
+            <a href="#" tooltip="{{stock.Symbol + ' Stock'}}" ng-style="{'color': colors[$index]}">{{stock.Symbol}} 
+              <button type="button" class="close" ng-click="removeStock(stock.Symbol)"> &times; </button>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
+
+    <form class="form-horizontal add-stocks">
+      <div class="searchbox" ng-hide="stocks.length >= 10">
+        <input type="text" ng-model="newStock" class="form-control new-stock-input" ng-change="searchStocks(newStock)" ng-model-options="{debounce: 500}" placeholder="Add Stock (Maximum 10 Stocks)">
+        <ul id="stocks-autocomplete" ng-show="stocksSearch !== undefined">
+          <li ng-repeat="stock in stocksSearch" class="form-control stock-select" data-symbol="{{stock.Symbol}}" ng-click="addStock(stock.Symbol)">{{stock.Symbol}} ({{stock.Name | limitTo: 20}}) </li>
+        </ul>
+      </div>
+      <div class="full-stocks" ng-hide="stocks.length < 10">
+        <p>Maximum stocks reached</p>
+      </div>
+
+    </form>
+
   </div>
 </main>
 
