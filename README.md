@@ -29,10 +29,10 @@ Single Page App that charts the stock market using data from the Markit on deman
  - AJAX
 
 ##### User Stories
- - As an unauthenticated user, I can view all bars in my area.
- - As an authenticated user, I can add myself to a bar to indicate I am going there tonight.
- - As an authenticated user, I can remove myself from a bar if I no longer want to go there.
- - As an unauthenticated user, when I login I should not have to search again.
+ - As a user, I can view a graph displaying the recent trend lines for each added stock.
+ - As a user, I can add new stocks by their symbol name.
+ - As a user, I can remove stocks.
+ - As a user, I can see changes in real-time when any other user adds or removes a stock.
 
 ##### Known issues
  - The API may stop responding after multiple queries in quick succession. The autocomplete uses the API as well.
